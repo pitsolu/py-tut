@@ -41,15 +41,14 @@ class Person:
     print(self.firstname, self.lastname)
 
   def getRole(self): #Polymorphism happens here
-    print(self.role)
+    print("study")
 
 class Student(Person):
-  role = "study"
   pass
 
 class Teacher(Person):
-  role = "lecture"
-  pass
+    def getRole(self): #Override base function getRole
+      print("lecture")
 ```
 ### Modules
 
@@ -61,14 +60,11 @@ class Person:
     self.firstname = fname
     self.lastname = lname
 
-  # def printname(self):
-    # print(self.firstname, self.lastname)
-
   def getName(self):
     print(self.firstname, self.lastname)
 
-  def getRole(self):
-    print(self.role)
+  def getRole(self): #Polymorphism happens here
+    print("study")
 ```
 
 Secondly, create file `student.py`. File `student.py` is also a module.
@@ -77,7 +73,6 @@ Secondly, create file `student.py`. File `student.py` is also a module.
 from person import Person # Import class Person from module person
 
 class Student(Person):
-  role = "study"
   pass
 ```
 
@@ -87,8 +82,8 @@ Thirdly, create file `teacher.py`. File `teacher.py` is a module.
 from person import Person # Import class Person from module person
 
 class Teacher(Person):
-  role = "lecture"
-  pass
+  def getRole(self): #Override base function getRole
+    print("lecture")
 ```
 
 Finally, create our execution base `test.py`.
