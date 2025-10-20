@@ -1,5 +1,5 @@
 from person import Person
 
 class Teacher(Person):
-  role = "lecture"
-  pass
+  def getRole(self):
+    print("lecture")
