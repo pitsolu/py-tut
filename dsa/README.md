@@ -10,7 +10,7 @@ DSA - Data Structures & Algorithims
   - Doubly Linked
   - Circular Linked
 - Queues
-- Stacks
+- [Stacks](#stack)
 - Heaps
 - Trees
   - Binary Trees
@@ -31,3 +31,20 @@ DSA - Data Structures & Algorithims
   - Merge
   - Quick
 - Time Complexities
+
+### Stack
+
+A stack is a data structure that can hold many elements, and the last element added is the 
+first one to be removed (LIFO).
+
+```python
+from stack import Stack
+
+s = Stack(["a","b","c"])
+s.push("d")
+s.peek() # d
+s.size() # 4
+s.empty() # False
+s.pop() # d
+s.pop() # c
+```
