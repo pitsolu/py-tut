@@ -7,9 +7,9 @@ class StackTest(unittest.TestCase):
 		self.shoppingList = Stack(["Bread", "Butter", "Milk"])
 
 	def test_push(self):
+		self.assertNotEqual(self.shoppingList.peek(), "Eggs")
 		self.shoppingList.push("Eggs")
 		self.assertEqual(self.shoppingList.peek(), "Eggs")
 
 if __name__ == '__main__':
     unittest.main()
-
