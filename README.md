@@ -1,4 +1,4 @@
 Python Tutorial
 ===
-- [OOP](/oop/README.md): Object Oriented Programming
-- [DSA](/dsa/README.md): Data Structures & Algorithms - Coming Soon
+- [OOP](/src/oop/README.md): Object Oriented Programming
+- [DSA](/src/dsa/README.md): Data Structures & Algorithms
