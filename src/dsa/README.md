@@ -37,8 +37,10 @@ DSA - Data Structures & Algorithims
 A stack is a data structure that can hold many elements, and the last element added is the 
 first one to be removed (LIFO).
 
+Run the code below in your `python` shell from the `root` directory (base directory)
+
 ```python
-from stack import Stack
+from src.dsa.stack import Stack
 
 s = Stack(["a","b","c"])
 s.push("d")
