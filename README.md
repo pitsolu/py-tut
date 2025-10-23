@@ -5,6 +5,14 @@ Python Tutorial
 
 ### Testing
 
+Install `pytest`
+
 ```sh
-./bin/tests
+pip install -U pytest
+```
+
+Run tests
+
+```sh
+pytest
 ```
