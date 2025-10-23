@@ -2,16 +2,22 @@ OOP - Object Oriented Programming
 ===
 
 ### Classes/Objects
+
+Run in `python` console.
+
 ```python
 class Student:
 	def getRole():
-  		print("study")
+  		return "study"
 
 class Teacher:
 	def getRole():
-  		print("lecture")
+  		return "lecture"
 ```
 ### Inheritance
+
+Run in `python` console.
+
 ```python
 class Person:
   def __init__(self, fname, lname):
@@ -19,17 +25,19 @@ class Person:
     self.lastname = lname
 
   def getName(self):
-    print(self.firstname, self.lastname)
+    return self.firstname + " " + self.lastname
 
 class Student(Person): #Inheritance happens here
 	def getRole():
-  		print("study")
+  		return "study"
 
 class Teacher(Person): #Inheritance happens here also
 	def getRole():
-  		print("lecture")
+  		return "lecture"
 ```
 ### Polymorphism
+
+Run in `python` console.
 
 ```python
 class Person:
@@ -38,19 +46,26 @@ class Person:
     self.lastname = lname
 
   def getName(self):
-    print(self.firstname, self.lastname)
+    return self.firstname + " " + self.lastname
 
   def getRole(self): #Polymorphism happens here
-    print("study")
+    return "study"
 
 class Student(Person):
   pass
 
 class Teacher(Person):
     def getRole(self): #Override base function getRole
-      print("lecture")
+      return "lecture"
 ```
 ### Modules
+
+Create a directory called `src/oop`
+
+```sh
+mkdir -p src/oop
+cd src/oop
+```
 
 Firstly, create file `person.py`. File `person.py` is a module.
 
@@ -61,16 +76,16 @@ class Person:
     self.lastname = lname
 
   def getName(self):
-    print(self.firstname, self.lastname)
+    return self.firstname + " " + self.lastname
 
   def getRole(self): #Polymorphism happens here
-    print("study")
+    return "study"
 ```
 
 Secondly, create file `student.py`. File `student.py` is also a module.
 
 ```python
-from person import Person # Import class Person from module person
+from src.oop.person import Person # Import class Person from module person
 
 class Student(Person):
   pass
@@ -79,26 +94,26 @@ class Student(Person):
 Thirdly, create file `teacher.py`. File `teacher.py` is a module.
 
 ```python
-from person import Person # Import class Person from module person
+from src.oop.person import Person # Import class Person from module person
 
 class Teacher(Person):
   def getRole(self): #Override base function getRole
-    print("lecture")
+    return "lecture"
 ```
 
-Finally, create our execution base `test.py`.
-
-```python
-from student import Student # Import class Student from module student
-from teacher import Teacher # Import class Teacher from module teacher
-
-for x in (Student("John", "Doe"), Teacher("Jane", "Doel")):
-	x.getName()
-	x.getRole()
-```
-
-Run the above code in your terminal.
+Finally run in `python` console where the modules were created (base directory).
 
 ```sh
-python test.py
+cd ../../ # Go back to base directory i.e above ./src
+```
+
+The above modules code is already in `./src/oop/` (base directory) path of `py-tut`
+
+```python
+from src.oop.student import Student # Import class Student from module student
+from src.oop.teacher import Teacher # Import class Teacher from module teacher
+
+for x in (Student("John", "Doe"), Teacher("Jane", "Doel")):
+	print(x.getName())
+	print(x.getRole())
 ```

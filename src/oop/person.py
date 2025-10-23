@@ -7,10 +7,10 @@ class Person:
     # print(self.firstname, self.lastname)
 
   def getName(self):
-    print(self.firstname, self.lastname)
+    return self.firstname + " " + self.lastname
 
   def getRole(self):
-    print("study")
+    return "study"
 
 #Use the Person class to create an object, and then execute the printname method:
 

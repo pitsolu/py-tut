@@ -1,5 +1,5 @@
-from person import Person
+from src.oop.person import Person
 
 class Teacher(Person):
   def getRole(self):
-    print("lecture")
+    return "lecture"
