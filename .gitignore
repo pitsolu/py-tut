@@ -1,4 +1,4 @@
 README-cassido.md
 __pycache__
-bst.py
 .pytest_cache
+db.sqlite
