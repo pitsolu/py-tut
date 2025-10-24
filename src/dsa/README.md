@@ -9,7 +9,7 @@ DSA - Data Structures & Algorithims
   - Singly Linked
   - Doubly Linked
   - Circular Linked
-- Queues
+- [Queues](#queue)
 - [Stacks](#stack)
 - Heaps
 - Trees
