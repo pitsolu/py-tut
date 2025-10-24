@@ -50,3 +50,20 @@ s.empty() # False
 s.pop() # d
 s.pop() # c
 ```
+
+### Queue
+
+A queue is a linear data structure that follows the First-In-First-Out (FIFO) principle.
+
+```python
+from src.dsa.queue import Queue
+q = Queue(["a","b","c"])
+q.enq("d")
+q.peek() # a
+q.size() # 4
+q.empty() # False
+q.deq() # a
+q.deq() # b
+q.deq() # c
+q.peek() # d
+```
