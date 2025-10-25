@@ -2,7 +2,7 @@ README-cassido.md
 __pycache__
 .pytest_cache
 db.sqlite
-/logs/*.logs
+/logs/*.log
 # /logs
 # /bin
 # .env

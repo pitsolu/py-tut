@@ -2,7 +2,6 @@ import bcrypt
 
 from pypika import QmarkParameter, Parameter
 
-
 def makeHash(password):
 	salt = bcrypt.gensalt()
 	return bcrypt.hashpw(password, salt) # Hash password

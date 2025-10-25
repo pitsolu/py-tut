@@ -6,13 +6,13 @@ from dotenv import dotenv_values
 from src.app.db.sqlite import Wrapper as W
 from src.app.helpers import Qmarks, QmarksUp
 
+config = dotenv_values(".env")
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='logs/app.log', level=logging.INFO)
+logging.basicConfig(filename=config["LOG"], format='%(asctime)s|%(levelname)s:%(name)s %(message)s')
+logger.setLevel(int(config["LOGLVL"]))
 
 class Base:
-	config = dotenv_values(".env")
 	_db = W(config["DB"])
-
 	def __init__(self, row):
 		self.load(row)    	
 
@@ -28,7 +28,12 @@ class Base:
 	@classmethod
 	def getById(sclass, id):
 		table = camelsnake.camel_to_snake(sclass.__name__)
-		row = sclass._db.getOne(f"SELECT * FROM {table} WHERE id = ?", (id,))
+		table = Table(table)
+
+		sql = str(Query.from_(table).select("*").where(table.id == Parameter("?")))
+		logger.debug([sql, id])
+
+		row = sclass._db.getOne(sql, (id,))
 		return sclass(row)
 
 	def dump(self):
@@ -48,7 +53,7 @@ class Base:
 			sql = str(QmarksUp(Query.update(table), fields)
 						.where(Criterion.all([table.id==Parameter("?")])))
 
-		logger.info([sql, params])
+		logger.debug([sql, params])
 
 		cursor = self._db.exec(sql, params)
 		if sql.startswith("INSERT"):
