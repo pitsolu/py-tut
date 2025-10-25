@@ -1,8 +1,10 @@
 import camelsnake
 import logging
 
+from pypika import Query, Table, Field, QmarkParameter, Criterion, Parameter
 from dotenv import dotenv_values
 from src.app.db.sqlite import Wrapper as W
+from src.app.helpers import Qmarks, QmarksUp
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='logs/app.log', level=logging.INFO)
@@ -34,19 +36,17 @@ class Base:
 
 	def save(self):
 		props = self.dump()
-		attrs = ", ".join(props.keys())
-		delims = ", ".join(["?"] * len(props))
-		table = camelsnake.camel_to_snake(self.__class__.__name__)
+		table = Table(camelsnake.camel_to_snake(self.__class__.__name__))
 
-		sql = f"INSERT INTO {table}({attrs}) values({delims})"
+		sql = str(Query.into(table).columns(*props.keys()).insert(Qmarks(len(props))))
 
 		params = list(props.values())
 		if hasattr(self, "id"):
-			id = props.pop("id")
-			fields = props.keys()
-			attrs = " = ?, ".join(fields) + " = ?"
-			sql = f"UPDATE {table} SET {attrs} WHERE id = ?"
-			self.id = id
+			self.id = props.pop("id")
+			fields = list(props.keys())
+			fields.remove("id")
+			sql = str(QmarksUp(Query.update(table), fields)
+						.where(Criterion.all([table.id==Parameter("?")])))
 
 		logger.info([sql, params])
 
