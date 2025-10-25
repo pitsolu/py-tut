@@ -1,0 +1,9 @@
+INFO:src.app.models:UPDATE user SET email = ?, password = ? WHERE id = ?
+INFO:src.app.models:INSERT INTO user(email, password) values(?, ?)
+INFO:src.app.models:UPDATE user SET email = ?, password = ? WHERE id = ?
+INFO:src.app.models:UPDATE user SET email = ?, password = ? WHERE id = ?
+INFO:src.app.lib:UPDATE user SET email = ?, password = ? WHERE id = ?
+INFO:src.app.base:INSERT INTO user(email, password) values(?, ?)
+INFO:src.app.base:['INSERT INTO user(email, password) values(?, ?)', ['devtryouts@gmail.com', b'$2b$12$XrsyjZZBKN5kxJwEPFAE4OeQ2N6Ge7afY2qVEuXVzv4UujtINaSwS']]
+INFO:src.app.base:['INSERT INTO user(email, password) values(?, ?)', ['devtryouts@gmail.com', b'$2b$12$XrsyjZZBKN5kxJwEPFAE4OeQ2N6Ge7afY2qVEuXVzv4UujtINaSwS']]
+INFO:src.app.base:['INSERT INTO user(email, password) values(?, ?)', ['devtryouts@gmail.com', b'$2b$12$4/eWJlB0kjD0ijz/9iqZ8eseBkIz4gH7UlrYsbTDkl0bBh2xgqSKW']]
