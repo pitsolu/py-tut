@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "py-tut"
+version = "1.0.0"
+description = "Python Tutorial"
+authors = ["pitsolu <pitsolu@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+bcrypt = "5.0.0"
+camelsnake = "0.0.2"
+PyPika = "0.48.9"
+pytest = "8.3.5"
+python-dotenv = "1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
