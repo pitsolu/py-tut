@@ -14,7 +14,7 @@ DSA - Data Structures & Algorithims
 - Heaps
 - Trees
   - Binary Trees
-  - Binary Search Trees
+  - [Binary Search Trees](#binary-search-tree)
   - Tries
   - Self Balancing Trees
 - Traversing Trees
@@ -118,3 +118,18 @@ A doubly linked list has nodes with addresses to both the previous and the next 
 ### Circular
 
 A circular linked list is like a singly or doubly linked list with the first node, the `head`, and the last node, the `tail`, connected.
+
+## Trees
+
+### Binary Search Tree
+
+```python
+from src.dsa.bst import *
+
+root = insert(Node("b"), "c")
+insert(root, "a")
+show(root, 0) # show tree from level 0
+#    -> c
+# -> b
+#    -> a
+```
