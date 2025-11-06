@@ -17,7 +17,6 @@ def Qmarks(count):
 		r.append(QmarkParameter())
 	return r
 
-
 # ignore
 def QmarksUp(qb, fields):
 	for field in fields:
