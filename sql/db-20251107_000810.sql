@@ -1,0 +1,11 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE role(id integer primary key autoincrement, name varchar(100), descr text);
+INSERT INTO role VALUES(1,'admin','Administrator');
+INSERT INTO role VALUES(2,'user','User');
+CREATE TABLE user(id integer primary key autoincrement, username varchar(100) unique, password varchar(100), role_id integer references role(id), status varchar(50) default 'Active');
+INSERT INTO user VALUES(1,'pitsolu',X'243262243132243551354a76564562413448685a725a37522e4d78344f6462513375637a5a4a4d53344d394b75554c54626869722f41444174644161',1,'Active');
+DELETE FROM sqlite_sequence;
+INSERT INTO sqlite_sequence VALUES('role',2);
+INSERT INTO sqlite_sequence VALUES('user',1);
+COMMIT;
