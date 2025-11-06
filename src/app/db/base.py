@@ -22,10 +22,10 @@ class GateWay:
 	rows = []
 
 class Base:
+	_props = []
 	_join = []
 	_db = SqliteDb().getDb()
 	def __init__(self, row):
-		self.gateway = {}
 		self.load(row)
 		if len(self._join) > 0:
 			foreign_id = self._join.pop()
