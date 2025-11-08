@@ -1,5 +1,6 @@
 import camelsnake
 import logging
+import inspect
 
 from pypika import Query, Table, Field, Criterion, Parameter
 from dotenv import dotenv_values
@@ -18,21 +19,51 @@ class SqliteDb:
 	def getDb(self):
 		return W(config["DB"])
 
-class GateWay:
-	rows = []
+class Gateway:
+	tables = []
+	def __init__(self, row):
+		self.row = row
+		self.models_module = __import__("src.app.models", fromlist=[""])
+		for obj in inspect.getmembers(self.models_module, inspect.isclass):
+			if issubclass(obj[1], Base) and obj[0]!="Base":
+				self.tables.append(camelsnake.camel_to_snake(obj[1].__name__))
+
+	def getTables(self):
+		return self.tables
+
+	@classmethod
+	def makeRow(sclass, row, table):
+		table+="_"
+		return {key.replace(table,''): row[key] for key in row.keys() if key.startswith(table)}
+
+	def getRset(self):
+		rset={}
+		for table in self.getTables():
+			rset[table]=Gateway.makeRow(self.row, table)
+
+		return rset
+
+	def makeModel(self, aggr):
+		rset = self.getRset()
+		_class = getattr(self.models_module, aggr)
+		table = camelsnake.camel_to_snake(aggr)
+		inst = _class(rset[table])
+
+		rset.pop(table)
+		okeys = rset.keys()
+		for key in okeys:
+			if hasattr(inst, key):
+				model = str(camelsnake.snake_to_camel(key)).capitalize()
+				setattr(inst, key, self.makeModel(model))
+
+		return inst
+
 
 class Base:
-	_props = []
-	_join = []
+	id=None
 	_db = SqliteDb().getDb()
 	def __init__(self, row):
 		self.load(row)
-		if len(self._join) > 0:
-			foreign_id = self._join.pop()
-			field, _ = foreign_id.split("_")
-			module = __import__("src.app.models", fromlist=[""])
-			foreign_class = getattr(module, field.capitalize())
-			setattr(self, field, foreign_class.getById(row[foreign_id]))
 
 	@property
 	def db(self):
@@ -43,9 +74,6 @@ class Base:
 			for key, value in row.items():
 				if hasattr(self, key):
 					setattr(self, key, value)
-				else:
-					if key.endswith("_id"):
-						self._join.append(key)
 
 	@classmethod
 	def getById(sclass, id):

@@ -1,7 +1,8 @@
 import camelsnake
 
 from src.app.helpers import *
-from src.app.db.base import Base, SqliteDb
+from src.app.db.base import *
+from src.app.db.qb import *
 
 @column("name")
 @column("descr")
@@ -14,17 +15,18 @@ class Role(Base):
 @column("username")
 @column("password")
 @column("status")
+# @refer("role_id")
 class User(Base):
 	role: Role = None
-	def __init__(self, row=None):     
+	def __init__(self, row=None):
 		super().__init__(row)
 
 	def checkPassword(self, password):
 		return checkHash(password, self.password)
 
 	def getByUsername(username):
-		# q = Query.from_(u).left_join(r).on(u.role_id == r.id).select(u.star, r.name)
-		sql = "SELECT u.id, u.username, u.password FROM user u WHERE u.username = ?"
+		sql = str(Qb(User).leftjoin(Role).where("username"))
+
 		row = SqliteDb().getDb().getOne(sql, (username,))
 
-		return User(row)
+		return Gateway(row).makeModel("User")

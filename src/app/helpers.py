@@ -26,8 +26,12 @@ def QmarksUp(qb, fields):
 # @columns decorator/annotation for models
 def column(field, value = None):
 	def class_decorator(cls):
+		meta = []
 		table = camelsnake.camel_to_snake(cls.__name__)
-		cls._props.append(table + "." + field)
+		if hasattr(cls, "_meta"):
+			meta = cls._meta
+		meta.append(table + "." + field)
+		setattr(cls, "_meta", meta)
 		setattr(cls, field, value)
 		return cls
 	return class_decorator
