@@ -88,7 +88,7 @@ class Base:
 		return sclass(row)
 
 	@classmethod
-	def getBy(sclass, field, value):
+	def getOneBy(sclass, field, value):
 		module = __import__("src.app.models", fromlist=[""])
 		qb = Qb(sclass)
 		for ref in sclass._refer:
@@ -110,15 +110,20 @@ class Base:
 		props = self.dump()
 		table = Table(camelsnake.camel_to_snake(self.__class__.__name__))
 
-		sql = str(Query.into(table).columns(*props.keys()).insert(Qmarks(len(props))))
+		id=None
+		if "id" in props.keys():
+			id = props.pop("id") 
+
+		if id is None:
+			sql = str(Query.into(table).columns(*props.keys()).insert(Qmarks(len(props))))
 
 		params = list(props.values())
 		if hasattr(self, "id"):
-			self.id = props.pop("id")
-			fields = list(props.keys())
-			fields.remove("id")
-			sql = str(QmarksUp(Query.update(table), fields)
-						.where(Criterion.all([table.id==Parameter("?")])))
+			if id is not None:
+				fields = list(props.keys())
+				sql = str(QmarksUp(Query.update(table), fields)
+							.where(Criterion.all([table.id==Parameter("?")])))
+				params.append(id)
 
 		logger.debug([sql, params])
 

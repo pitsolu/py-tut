@@ -13,7 +13,8 @@ def hello_world():
 @app.route("/user/<id>")
 def get_user(id):
     try:
-        u=User.getById(id)
+        # u=User.getById(id)
+        u=User.getOneBy("id", id)
         u.role = u.role.dump()
         del u.password
         return json.dumps(u.dump())

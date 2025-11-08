@@ -25,4 +25,4 @@ class User(Base):
 		return checkHash(password, self.password)
 
 	def getByUsername(username):
-		return User.getBy("username", username)
+		return User.getOneBy("username", username)
