@@ -35,3 +35,13 @@ def column(field, value = None):
 		setattr(cls, field, value)
 		return cls
 	return class_decorator
+
+def refer(field, value=None):	
+	def class_decorator(cls):
+		refer = []
+		if hasattr(cls, "_refer"):
+			refer = cls._refer
+		refer.append(field)
+		setattr(cls, "_refer", refer)
+		return cls
+	return class_decorator

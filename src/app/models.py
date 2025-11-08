@@ -15,7 +15,7 @@ class Role(Base):
 @column("username")
 @column("password")
 @column("status")
-# @refer("role_id")
+@refer("role_id")
 class User(Base):
 	role: Role = None
 	def __init__(self, row=None):
@@ -25,8 +25,4 @@ class User(Base):
 		return checkHash(password, self.password)
 
 	def getByUsername(username):
-		sql = str(Qb(User).leftjoin(Role).where("username"))
-
-		row = SqliteDb().getDb().getOne(sql, (username,))
-
-		return Gateway(row).makeModel("User")
+		return User.getBy("username", username)

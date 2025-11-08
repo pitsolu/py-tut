@@ -5,6 +5,7 @@ import inspect
 from pypika import Query, Table, Field, Criterion, Parameter
 from dotenv import dotenv_values
 from src.app.db.sqlite import Wrapper as W
+from src.app.db.qb import *
 from src.app.helpers import Qmarks, QmarksUp
 
 config = dotenv_values(".env")
@@ -85,6 +86,22 @@ class Base:
 
 		row = sclass._db.getOne(sql, (id,))
 		return sclass(row)
+
+	@classmethod
+	def getBy(sclass, field, value):
+		module = __import__("src.app.models", fromlist=[""])
+		qb = Qb(sclass)
+		for ref in sclass._refer:
+			table, _ = ref.split("_")
+			model = getattr(module, camelsnake.snake_to_camel(table).capitalize())
+			qb.leftjoin(model)
+
+		sql = str(qb.where(field))
+		logger.debug([sql, value])
+
+		row = SqliteDb().getDb().getOne(sql, (value,))
+
+		return Gateway(row).makeModel(sclass.__name__)
 
 	def dump(self):
 		return self.__dict__

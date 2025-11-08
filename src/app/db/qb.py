@@ -1,19 +1,19 @@
 import camelsnake
 
-from src.app.db.base import *
+# from src.app.db.base import *
 
 ###
 # Query Builder
 ###
 class Qb:
-	def __init__(self, model:Base):
+	def __init__(self, model):
 		self.predicates = []
 		self.fields = []
 		self.joins = []
 		self.aggr = camelsnake.camel_to_snake(model.__name__)
 		self._from(model)
 
-	def _from(self, model:Base):
+	def _from(self, model):
 		for field in model._meta:
 			table, col = field.split(".")
 			self.fields.append(f"{field} as {table}_{col}")
@@ -21,7 +21,7 @@ class Qb:
 
 		return self
 
-	def leftjoin(self, model:Base):
+	def leftjoin(self, model):
 		self._from(model)
 		table = camelsnake.camel_to_snake(model.__name__)
 		self.joins.append(f" LEFT JOIN {table} ON {table}.id = {self.aggr}.{table}_id")
