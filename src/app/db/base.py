@@ -37,21 +37,21 @@ class Gateway:
 		table+="_"
 		return {key.replace(table,''): row[key] for key in row.keys() if key.startswith(table)}
 
-	def getRset(self):
-		rset={}
+	def getRow(self):
+		row={}
 		for table in self.getTables():
-			rset[table]=Gateway.makeRow(self.row, table)
+			row[table]=Gateway.makeRow(self.row, table)
 
-		return rset
+		return row
 
 	def makeModel(self, aggr):
-		rset = self.getRset()
+		row = self.getRow()
 		_class = getattr(self.models_module, aggr)
 		table = camelsnake.camel_to_snake(aggr)
-		inst = _class(rset[table])
+		inst = _class(row[table])
 
-		rset.pop(table)
-		okeys = rset.keys()
+		row.pop(table)
+		okeys = row.keys()
 		for key in okeys:
 			if hasattr(inst, key):
 				model = str(camelsnake.snake_to_camel(key)).capitalize()
@@ -86,9 +86,9 @@ class Base:
 
 		row = sclass._db.getOne(sql, (id,))
 		return sclass(row)
-
+		
 	@classmethod
-	def getOneBy(sclass, field, value):
+	def getLeftJoinSql(sclass, field):
 		module = __import__("src.app.models", fromlist=[""])
 		qb = Qb(sclass)
 		for ref in sclass._refer:
@@ -97,11 +97,25 @@ class Base:
 			qb.leftjoin(model)
 
 		sql = str(qb.where(field))
-		logger.debug([sql, value])
+		return sql
+
+	@classmethod
+	def getOneBy(sclass, field, value):
+		sql = sclass.getLeftJoinSql(field)
+		logger.debug(["getOneBy", sql, value])
 
 		row = SqliteDb().getDb().getOne(sql, (value,))
 
 		return Gateway(row).makeModel(sclass.__name__)
+
+	@classmethod
+	def getManyBy(sclass, field, value):
+		sql = sclass.getLeftJoinSql(field)
+		logger.debug(["getManyBy", sql, value])
+
+		rows = SqliteDb().getDb().getAll(sql, (value,))
+
+		return [Gateway(row).makeModel(sclass.__name__) for row in rows]
 
 	def dump(self):
 		return self.__dict__
