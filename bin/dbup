@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sqlite3 db.sqlite < sql/db-20251107_000810.sql
