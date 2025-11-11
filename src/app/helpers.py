@@ -36,6 +36,7 @@ def column(field, value = None):
 		return cls
 	return class_decorator
 
+# @refer decorator for foreign relationship on models
 def refer(field, value=None):	
 	def class_decorator(cls):
 		refer = []

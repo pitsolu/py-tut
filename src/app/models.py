@@ -6,7 +6,6 @@ from src.app.db.qb import *
 
 @column("name")
 @column("descr")
-# @column("status")
 class Role(Base):
 	def __init__(self, row=None):
 		super().__init__(row)
