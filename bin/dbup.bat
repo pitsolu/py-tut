@@ -1,0 +1,1 @@
+sqlite3 db.sqlite < sql/db-20251112_010449.sql
