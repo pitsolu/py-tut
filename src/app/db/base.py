@@ -20,7 +20,7 @@ class SqliteDb:
 	def getDb(self):
 		return W(config["DB"])
 
-class Gateway:
+class RowGateway:
 	tables = []
 	def __init__(self, row):
 		self.row = row
@@ -40,7 +40,7 @@ class Gateway:
 	def getRow(self):
 		row={}
 		for table in self.getTables():
-			row[table]=Gateway.makeRow(self.row, table)
+			row[table]=RowGateway.makeRow(self.row, table)
 
 		return row
 
@@ -91,10 +91,11 @@ class Base:
 	def getLeftJoinSql(sclass, field):
 		module = __import__("src.app.models", fromlist=[""])
 		qb = Qb(sclass)
-		for ref in sclass._refer:
-			table, _ = ref.split("_")
-			model = getattr(module, camelsnake.snake_to_camel(table).capitalize())
-			qb.leftjoin(model)
+		if hasattr(sclass, "_refer"):
+			for ref in sclass._refer:
+				table, _ = ref.split("_")
+				model = getattr(module, camelsnake.snake_to_camel(table).capitalize())
+				qb.leftjoin(model)
 
 		sql = str(qb.where(field))
 		return sql
@@ -106,7 +107,7 @@ class Base:
 
 		row = SqliteDb().getDb().getOne(sql, (value,))
 
-		return Gateway(row).makeModel(sclass.__name__)
+		return RowGateway(row).makeModel(sclass.__name__)
 
 	@classmethod
 	def getManyBy(sclass, field, value):
@@ -115,7 +116,7 @@ class Base:
 
 		rows = SqliteDb().getDb().getAll(sql, (value,))
 
-		return [Gateway(row).makeModel(sclass.__name__) for row in rows]
+		return [RowGateway(row).makeModel(sclass.__name__) for row in rows]
 
 	def dump(self):
 		return self.__dict__
@@ -144,3 +145,20 @@ class Base:
 		cursor = self._db.exec(sql, params)
 		if sql.startswith("INSERT"):
 			self.id = cursor.lastrowid
+
+	def __setattr__(self, name, value):
+		super().__setattr__(name, value)
+
+		if hasattr(self, "__annotations__"):
+			rels = list(self.__annotations__.keys())
+			if name in rels:
+				if isinstance(value, Base):
+					setattr(self, name+"_id", value.id)
+
+		if name.endswith("_id"):
+			field = table = name.strip("_id")
+			model_name = camelsnake.snake_to_camel(table).capitalize()
+			module = __import__("src.app.models", fromlist=[""])
+			model = getattr(module, model_name)
+			obj = model.getOneBy("id", value)
+			super().__setattr__(field, obj)

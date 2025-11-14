@@ -6,3 +6,8 @@ db.sqlite
 # /logs
 # /bin
 # .env
+app.key
+py-tut.sublime-project
+py-tut.sublime-workspace
+sites.sublime-project
+sites.sublime-workspace
